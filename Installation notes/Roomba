@@ -1,0 +1,19 @@
+Pejsestue
+
+2024-04-15 13:13:33.048 DEBUG (Thread-83 (_thread_main)) [homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'region_id': '1', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713179612, 'initiator': 'rmtApp', 'favorite_id': 'f705468634cff473095b27bcc94c6c05'}}}}
+
+Stue
+
+[homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'region_id': '2', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713181165, 'initiator': 'rmtApp', 'favorite_id': 'b94f2146f732e8d69b1de0fbb792db66'}}}}
+
+Kontor
+
+[homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'region_id': '13', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713181997, 'initiator': 'rmtApp', 'favorite_id': 'd2e77badf1f2d3c4f5f160d7f7c11415'}}}}
+
+Entre
+
+homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'params': {'noAutoPasses': True, 'twoPass': False}, 'region_id': '15', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713182491, 'initiator': 'rmtApp', 'favorite_id': 'a802993b4c5a8dbcc2c777382e02ced7'}}}}
+
+Køkken
+
+[homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'params': {'noAutoPasses': True, 'twoPass': False}, 'region_id': '14', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713182791, 'initiator': 'rmtApp', 'favorite_id': '23afb004011cbc6cde5a33897ce8c1a3'}}}}
