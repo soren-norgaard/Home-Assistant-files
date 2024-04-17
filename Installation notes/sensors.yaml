@@ -1,0 +1,69 @@
+
+#### Energy Calculations ###############################
+  - platform: template
+    sensors:
+      home_consumption:
+        friendly_name: House Consumption
+        unit_of_measurement: "W"
+        device_class: power
+        value_template: >-
+           {{ states('sensor.symo_6_0_3_m_1_power_ac') |float + states('sensor.deye_pv1_power') |float - states('sensor.active_export')|float}}
+      car_consumption:
+        friendly_name: Car Consumption
+        unit_of_measurement: "W"
+        device_class: power
+        value_template: >-
+          {{ states('number.the_bebop_charging_amps') |float * state_attr('sensor.the_bebop_charger_power', 'charger_volts') * 3}}
+
+
+
+#      charge_complete:
+#        friendly_name: Charge Complete
+#        value_template: " {{ state_attr('binary_sensor.the_bebop_charger_sensor', 'charging_state') }} "
+#    charge_complete:
+#        friendly_name: Charge Complete
+#        value_template: >-
+#          {{ state_attr('sensor.binary_sensor.the_bebop_charger_sensor', 'charging_state') }}
+
+#─────────────────────────────────────────────────────────────────────────────
+  # Carnot.dk REST sensor
+  #─────────────────────────────────────────────────────────────────────────────
+
+  - platform: rest
+    resource: https://whale-app-dquqw.ondigitalocean.app/openapi/get_predict
+    name: elprognose_carnotdk
+    scan_interval: 3600
+    headers:
+      Accept: application/json
+      apikey: C8DE5A3425BA19F57ECEE8051C116DEC88AF4F226A9C757918728B795107FFBB
+      username: norgaard@hotmail.com
+    params:
+      daysahead: 7
+      energysource: spotprice
+      region: dk1
+    json_attributes:
+      - predictions
+    value_template: "{% if value_json is not none %}OK {{value_json.predictions[0].addedtime}}{% else %}Unavailable{% endif %}"
+
+
+
+
+
+#        unit_of_measurement: kWh
+#        device_class: energy
+#        value_template: >-
+#          {{ states('sensor.active_import') |float + states('sensor.symo_6_0_3_m_1_power_ac') |float - states('sensor.active_export')|float}}
+#      accumulated_active_export:
+#        unit_of_measurement: kWh
+#        device_class: energy
+#        value_template: >-
+#          {{ states('sensor.active_import') |float + states('sensor.symo_6_0_3_m_1_power_ac') |float - states('sensor.active_export')|float}}
+#{{ state_attr('sensor.<car_name>_charging_rate_sensor', 'charger_power') |float *1000}}
+#sensor.the_bebop_charging_state_data_sensor
+#{{ state_attr('sensor.the_bebop_charging_state_data_sensor', 'charger_actual_current') * state_attr('sensor.the_bebop_charging_state_data_sensor', 'charger_voltage') * 3}}
+
+
+#  - platform: rest
+#    resource: https://api.forecast.solar/estimate/53.28013678533123/-3.050305484049937/30/0/1
+
+

@@ -1,0 +1,51 @@
+tesla_charging:
+  alias: tesla charging
+  sequence:
+  - service: tesla_custom.api
+    data:
+      command: CHARGING_AMPS
+      parameters:
+        path_vars:
+          vehicle_id: '{{ state_attr(''binary_sensor.the_bebop_online_sensor'', ''id'')
+            }}'
+        charging_amps: '{{ ((states(''sensor.symo_6_0_3_m_1_power_ac''))| float /1000
+          )| int }}'
+  mode: single
+'1710252672812':
+  alias: Alarm - Flash en Sirene 01 - Aan
+  sequence:
+  - data:
+      duration: 60
+      duty_cycle: 0
+      ieee: 34:10:f4:ff:fe:07:d0:ce
+      intensity: 2
+      level: 1
+      mode: 1
+      strobe: 1
+    service: zha.warning_device_warn
+  mode: single
+  icon: mdi:volume-high
+'1710252955991':
+  alias: Alarm - Flash en Sirene 01 - Aan
+  sequence:
+  - data:
+      duration: 65535
+      duty_cycle: 2
+      ieee: 34:10:f4:ff:fe:08:73:6a
+      intensity: 2
+      level: 3
+      mode: 1
+      strobe: 0
+    service: zha.warning_device_warn
+  mode: single
+  icon: mdi:volume-high
+test:
+  alias: test
+  sequence:
+  - service: zha.warning_device_squawk
+    data:
+      mode: 0
+      strobe: 1
+      level: 2
+      ieee: 34:10:f4:ff:fe:08:73:6a
+  mode: single

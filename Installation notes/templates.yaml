@@ -1,0 +1,247 @@
+
+  - sensor:
+
+## Calculate the power used by the home from known values of solar generation, battery charge/discharge, and grid demand
+#      - name: "Home Power"
+#        unit_of_measurement: 'W'
+#        device_class: 'power'
+#        state_class: 'measurement'
+#        state: >-
+#          {% set power = ((states('sensor.active_import')|int) + (states('sensor.deye_pv1_power')|int)) + (states('sensor.microinverter_power_out')|int(default=0)) - (states('sensor.active_export')|int) + states('sensor.deye_battery_power')|int(default=0) %}
+#          {% if power > 0 %}
+#            {{ power }}
+#          {% else -%}
+#            0
+#          {% endif %}
+
+# Calculate the power used by the home from known values of solar generation, battery charge/discharge, and grid demand
+      - name: "Home Power"
+        unit_of_measurement: 'W'
+        device_class: 'power'
+        state_class: 'measurement'
+        state: >-
+          {% set power = (((states('sensor.deye_load_l1_power')|int) + (states('sensor.deye_load_l2_power')|int)) + (states('sensor.deye_load_l3_power')|int)) %}
+          {% if power > 0 %}
+            {{ power }}
+          {% else -%}
+            0
+          {% endif %}
+
+# Templates for Actual Powerflow transfer charts (APF - Actual PowerFlow)
+#
+# Developed by AviadorLP
+#
+# If your sensor is negative when it should be positive replace that complete line with
+#         state: "{{ 0 - states('ReplaceWithYourSensor')|int(default=0) }}"
+#
+# If you don't have a battery replace that complete line with
+#         state: "{{ 0 }}"
+
+    # grid sensor must be negative when importing and positive when exporting
+      - name: APF Grid Entity
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: "{{ 0 - states('sensor.deye_total_grid_power')|int(default=0) }}"
+    # sensor must always be 0 or positive (i think they always are). Does not include battery consumption
+      - name: APF House Entity
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: "{{ states('sensor.home_power')|int(default=0) }}"
+
+    # sensor must always be 0 or positive (i think they always are)
+      - name: APF Generation Entity
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: "{{ (states('sensor.deye_pv1_power')|int) + (states('sensor.microinverter_power_out')|int)|int(default=0) }}"
+
+    # battery sensor must be positive when charging and negative when discharging
+      - name: APF Battery Entity
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+    #    state: "{{ 0 }}"
+        state: "{{ 0 - states('sensor.deye_battery_power')|int(default=0) }}"
+
+    # Required to reduce code later on
+      - name: APF Grid Import
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_grid_entity')|int(default=0) < 0 %}
+            {{ states('sensor.apf_grid_entity')|int(default=0)|abs }}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: APF Grid2House
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state:  >
+          {% if states('sensor.apf_grid_import')|int(default=0) > states('sensor.apf_house_entity')|int(default=0) %}
+            {{ states('sensor.apf_house_entity')|int(default=0) }}
+          {% else %}
+            {{ states('sensor.apf_grid_import')|int(default=0) }}
+          {% endif %}
+
+      - name: APF Grid2Batt
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_grid_import')|int(default=0) > states('sensor.apf_house_entity')|int(default=0) %}
+            {{ states('sensor.apf_grid_import')|int(default=0) - states('sensor.apf_house_entity')|int(default=0) }}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: APF Batt2House
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_battery_entity')|int(default=0) < 0 %}
+            {% if states('sensor.apf_battery_entity')|int(default=0)|abs > states('sensor.apf_house_entity')|int(default=0) %}
+              {{ states('sensor.apf_house_entity')|int(default=0) }}
+            {% else %}
+              {{ states('sensor.apf_battery_entity')|int(default=0)|abs }}
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+
+    # This might be called house to grid, and can happen in rare circumstances,
+    # like when the inverter is not able to do a precise adjustment of power fast enough
+    # or when you want to force a discharge of the battery or something...
+    # But it only happens with battery or other power generator users.
+      - name: APF Batt2Grid
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_battery_entity')|int(default=0) < 0 %}
+            {% if states('sensor.apf_battery_entity')|int(default=0)|abs > states('sensor.apf_house_entity')|int(default=0) %}
+              {{ states('sensor.apf_battery_entity')|int(default=0)|abs - states('sensor.apf_house_entity')|int(default=0) }}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: APF Solar2Grid
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_grid_entity')|int(default=0) > states('sensor.apf_batt2grid')|int(default=0) %}
+            {{ states('sensor.apf_grid_entity')|int(default=0) - states('sensor.apf_batt2grid')|int(default=0) }}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: APF Solar2House
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_generation_entity')|int(default=0) > 0 and states('sensor.apf_house_entity')|int(default=0) > states('sensor.apf_batt2house')|int(default=0) + states('sensor.apf_grid_import')|int(default=0) %}
+            {% if states('sensor.apf_generation_entity')|int(default=0) > states('sensor.apf_house_entity')|int(default=0) - states('sensor.apf_batt2house')|int(default=0) - states('sensor.apf_grid2house')|int(default=0) %}
+              {{ states('sensor.apf_house_entity')|int(default=0) - states('sensor.apf_batt2house')|int(default=0) - states('sensor.apf_grid2house')|int(default=0) }}
+            {% else %}
+              {{ states('sensor.apf_generation_entity')|int(default=0) }}
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: APF Solar2Batt
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: W
+        state: >
+          {% if states('sensor.apf_generation_entity')|int(default=0) > 0 and states('sensor.apf_battery_entity')|int(default=0) > 0 %}
+            {% if states('sensor.apf_battery_entity')|int(default=0) > states('sensor.apf_grid2batt')|int(default=0) %}
+              {% if states('sensor.apf_generation_entity')|int(default=0) - states('sensor.apf_solar2house')|int(default=0) > states('sensor.apf_battery_entity')|int(default=0) - states('sensor.apf_grid2batt')|int(default=0) %}
+                {{ states('sensor.apf_battery_entity')|int(default=0) - states('sensor.apf_grid2batt')|int(default=0) }}
+              {% else %}
+                {{ states('sensor.apf_generation_entity')|int(default=0) - states('sensor.apf_solar2house')|int(default=0) - states('sensor.apf_solar2grid')|int(default=0) }}
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+          
+      - name: "Microinverter Power Out"
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: >
+          {% if states('sensor.deye_gen_power')|int(default=0) > 20000 %}
+            {{ states('sensor.deye_gen_power')|int(default=0) - 65535 }}
+          {% else %}
+            {{ states('sensor.deye_gen_power')|int(default=0) }}
+          {% endif %}
+
+
+# Discharging Power, return value when Discharging else 0
+
+      - name: "Discharging Power"
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: "{% set original_sensor = states('sensor.apf_battery_entity') | float %}
+          {{ original_sensor if original_sensor < 0 else 0 }}"
+
+
+
+# Can solar supply the heatpump
+
+      - name: "Heatpump Excess Power"
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: "{{ 0 + states('sensor.apf_generation_entity')|int(default=0) - states('sensor.apf_house_entity')|int(default=0) + states('sensor.qubino_3_phase_smart_meter_electric_consumption_w')|int(default=0) + states('sensor.discharging_power')|int(default=0) + states('sensor.discharging_power')|int(default=0) - states('sensor.apf_battery_entity')|int(default=0)}}"
+
+# Calculate average floortemperature
+
+      - name: "Average floor temp"
+        unit_of_measurement: "°C"
+        state_class: measurement
+        device_class: temperature
+        state: "{{ ((states('sensor.stue_j_32307220')|float | round(2) + states('sensor.pejsestue_d_32294932')|float | round(2) + states('sensor.udestue_335304980')|float | round(2)) / 3) | round(1)  }}"
+
+# Calculate Hot Tub Temperature
+
+      - name: "Hot Tub Temperature"
+        unit_of_measurement: "°C"
+        state_class: measurement
+        device_class: temperature
+        state: "{{ state_attr('climate.dc_inverter_swimming_pool_heat_pump', 'current_temperature') }}"
+
+## calculate solar benefits
+      - name: Solar Benefit
+        unit_of_measurement: $/h
+        state: >
+          {{states('sensor.apf_solar2house')|float(0) * states('sensor.energi_data_service')|float(0)/1000
+          + states('sensor.apf_solar2batt')|float(0) * states('sensor.energi_data_service_spot')|float(0)/1000
+          + states('sensor.apf_solar2grid')|float(0) * states('sensor.energi_data_service_spot')|float(0)/1000}}
+
+      - name: Battery Benefit
+        unit_of_measurement: $/h
+        state: >
+          {{states('sensor.apf_batt2grid')|float(0) * states('sensor.energi_data_service_spot')|float(0)/1000
+          - states('sensor.apf_grid2batt')|float(0) * states('sensor.energi_data_service')|float(0)/1000
+          - states('sensor.apf_solar2batt')|float(0) * states('sensor.energi_data_service_spot')|float(0)/1000
+          + states('sensor.apf_batt2house')|float(0) * states('sensor.energi_data_service')|float(0)/1000}}
+
+      - name: battery+solar benefit
+        unit_of_measurement: $/h
+        state: >
+          {{states('sensor.battery_benefit')|float(0) + states('sensor.solar_benefit')|float(0)}}

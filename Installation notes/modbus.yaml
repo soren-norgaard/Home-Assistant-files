@@ -1,0 +1,400 @@
+
+- name: sprsun
+  type: tcp
+  host: 10.0.1.84
+  port: 8899
+  delay: 1
+  timeout: 10
+  retries: 10
+  sensors:
+    - name: "Temperature Inlet"
+      address: 0x000E
+      scan_interval: 10
+      slave: 1
+      input_type: holding
+#    - name: "Temperature Ambient"
+#      address: 0x0011
+#      scan_interval: 10
+#      slave: 1
+#      input_type: holding
+# Heatpump registers. Slave 1. 
+    - name: "Heatpump Switching input symbol"
+      unique_id: heatpump_switching_input_symbol
+      slave: 1
+      address: 0x0002
+      data_type: uint16
+    - name: "Heatpump Working status mark"
+      unique_id: heatpump_Working_Status_Mark
+      slave: 1
+      address: 0x0003
+      data_type: uint16
+    - name: "Heatpump Output symbol 1"
+      unique_id: heatpump_output_symbol_1
+      slave: 1
+      address: 0x0004
+      data_type: uint16
+    - name: "Heatpump Output symbol 2"
+      unique_id: heatpump_output_symbol_2
+      slave: 1
+      address: 0x0005
+      data_type: uint16
+    - name: "Heatpump Output symbol 3"
+      unique_id: heatpump_output_symbol_3
+      slave: 1
+      address: 0x0006
+      data_type: uint16
+    - name: "Heatpump Failure symbol 1"
+      unique_id: heatpump_failure_symbol_1
+      slave: 1
+      address: 0x0007
+      data_type: uint16
+    - name: "Heatpump Failure symbol 2"
+      unique_id: heatpump_failure_symbol_2
+      slave: 1
+      address: 0x0008
+      data_type: uint16
+    - name: "Heatpump Failure symbol 3"
+      unique_id: heatpump_failure_symbol_3
+      slave: 1
+      address: 0x0009
+      data_type: uint16
+    - name: "Heatpump Failure symbol 4"
+      unique_id: heatpump_failure_symbol_4
+      slave: 1
+      address: 0x000A
+      data_type: uint16
+    - name: "Heatpump Failure symbol 5"
+      unique_id: heatpump_failure_symbol_5
+      slave: 1
+      address: 0x000B
+      data_type: uint16
+    - name: "Heatpump Failure symbol 6"
+      unique_id: heatpump_failure_symbol_6
+      slave: 1
+      address: 0x000C
+      data_type: uint16
+    - name: "Heatpump Failure symbol 7"
+      unique_id: heatpump_failure_symbol_7
+      slave: 1
+      address: 0x000D
+      data_type: uint16
+    - name: "Heatpump Inlet temperature"
+      unique_id: heatpump_inlet_temperature
+      slave: 1
+      address: 0x000E
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.1
+      precision: 1
+    - name: "Heatpump Hot water temperature"
+      unique_id: heatpump_hotwater_temperature
+      slave: 1
+      address: 0x000F
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.1
+      precision: 1
+    - name: "Heatpump Ambient temperature"
+      unique_id: heatpump_ambient_temperature
+      slave: 1
+      address: 0x0011
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.5
+      precision: 1
+    - name: "Heatpump Outlet temperature"
+      unique_id: heatpump_outlet_temperature
+      slave: 1
+      address: 0x0012
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.1
+      precision: 1
+    - name: "Heatpump Suction gas temperature"
+      unique_id: heatpump_suction_gas_temperature
+      slave: 1
+      address: 0x0015
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.5
+      precision: 1
+    - name: "Heatpump Coil temperature"
+      unique_id: heatpump_coil_temperature
+      slave: 1
+      address: 0x0016
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.5
+      precision: 1
+    - name: "Heatpump Exhaust temperature"
+      unique_id: heatpump_exhaust_temperature
+      slave: 1
+      address: 0x001B
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.1
+      precision: 1
+    - name: "Heatpump EEV1 Step"
+      unique_id: heatpump_eev1_step
+      slave: 1
+      address: 0x001C
+      data_type: uint16
+    - name: "Heatpump EEV2 step"
+      unique_id: heatpump_eev2_step
+      slave: 1
+      address: 0x001D
+      data_type: uint16
+    - name: "Heatpump Compressor frequency"
+      unique_id: heatpump_compressor_frequency
+      slave: 1
+      address: 0x001E
+      data_type: uint16
+      unit_of_measurement: hz	
+    - name: "Heatpump Frequency conversion failure 1"
+      unique_id: heatpump_frequency_conversion_failure_1
+      slave: 1
+      address: 0x001F
+      data_type: uint16  
+    - name: "Heatpump Frequency conversion failure 2"
+      unique_id: heatpump_frequency_conversion_failure_2
+      slave: 1
+      address: 0x0020
+      data_type: uint16
+    - name: "Heatpump DC bus voltage"
+      unique_id: heatpump_dc_bus_voltage
+      slave: 1
+      address: 0x0021
+      data_type: uint16
+      unit_of_measurement: V
+    - name: "Heatpump Driving temperature"
+      unique_id: heatpump_driving_temperature
+      slave: 1
+      address: 0x0022
+      data_type: uint16
+      unit_of_measurement: °C
+      scale:  0.5
+      precision: 1
+    - name: "Heatpump Compressor current"
+      unique_id: heatpump_compressor_current
+      slave: 1
+      address: 0x0023
+      data_type: uint16
+      unit_of_measurement: A
+    - name: "Heatpump Target frequency"
+      unique_id: heatpump_target_frequency
+      slave: 1
+      address: 0x0024
+      data_type: uint16
+      unit_of_measurement: hz
+    - name: "Heatpump DC fan 1 speed"
+      unique_id: heatpump_dc_fan_1_speed
+      slave: 1
+      address: 0x0026
+      data_type: uint16
+    - name: "Heatpump DC fan 2 speed"
+      unique_id: heatpump_dc_fan_2_speed
+      slave: 1
+      address: 0x0027
+      data_type: uint16
+    - name: "Heatpump Evaporator temperature"
+      unique_id: heatpump_evaporator_temperature
+      slave: 1
+      address: 0x0028
+      data_type: uint16
+      scale:  0.1
+      precision: 1
+      unit_of_measurement: °C
+    - name: "Heatpump Condenser temperature"
+      unique_id: heatpump_condenser_temperature
+      slave: 1
+      address: 0x0029
+      data_type: uint16
+      scale:  0.1
+      precision: 1
+      unit_of_measurement: °C
+    - name: "Heatpump Controller version"
+      unique_id: heatpump_controller_version
+      slave: 1
+      address: 0x002C
+      data_type: uint16
+    - name: "Heatpump Display version"
+      unique_id: heatpump_display_version
+      slave: 1
+      address: 0x002D
+      data_type: uint16
+    - name: "Heatpump DC pump speed"
+      unique_id: heatpump_dc_pump_speed
+      slave: 1
+      address: 0x002E
+      data_type: uint16
+    - name: "Heatpump Suction pressure"
+      unique_id: heatpump_suction_pressure
+      slave: 1
+      address: 0x002F
+      data_type: uint16
+      scale:  0.01
+      precision: 1
+      unit_of_measurement: bar
+    - name: "Heatpump Discharge pressure"
+      unique_id: heatpump_discharge_pressure
+      slave: 1
+      address: 0x0030
+      data_type: uint16
+#      scale:  0.00689476
+      scale: 0.01
+      precision: 1
+      unit_of_measurement: bar
+    - name: "Heatpump DC fan target"
+      unique_id: heatpump_dc_fan_target
+      slave: 1
+      address: 0x0031
+      data_type: uint16
+    - name: "Heatpump P06 unit mode"
+      unique_id: heatpump_p06_unit_mode
+      slave: 1
+      address: 0x0036
+      data_type: uint16
+    - name: "Heatpump H15 Compressor total run"
+      unique_id: heatpump_compressor_total_run
+      slave: 1
+      address: 0x003B
+      data_type: uint16      
+      scale: 5
+    - name: "Heatpump H16 Compressor continous run"
+      unique_id: heatpump_compressor_continous_run
+      slave: 1
+      address: 0x003C
+      data_type: uint16      
+      scale: 5
+    - name: "Heatpump P04 Hotwater setpoint"
+      unique_id: heatpump_hotwater_setpoint
+      slave: 1
+      address: 0x00CA
+      data_type: uint16
+      input_type: input
+      scale:  0.5
+      precision: 1
+      unit_of_measurement: °C
+    - name: "Heatpump P02 Cooling setpoint"
+      unique_id: heatpump_cooling_setpoint
+      slave: 1
+      address: 0x00CB
+      data_type: uint16
+      scale:  0.5
+      precision: 1
+      unit_of_measurement: °C  
+    - name: "Heatpump P01 heating setpoint"
+      unique_id: heatpump_heating_setpoint
+      slave: 1
+      address: 0x00CC
+      data_type: uint16
+      scale:  0.5
+      precision: 1
+      unit_of_measurement: °C
+    - name: "Heatpump F23 Compressor mode"
+      unique_id: heatpump_f23_compressor_mode
+      slave: 1
+      address: 0x0190
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R42"
+      unique_id: heatpump_eco_freq_heat_R42
+      slave: 1
+      address: 0x0135
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R43"
+      unique_id: heatpump_eco_freq_heat_R43
+      slave: 1
+      address: 0x0136
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R44"
+      unique_id: heatpump_eco_freq_heat_R44
+      slave: 1
+      address: 0x0137
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R45"
+      unique_id: heatpump_eco_freq_heat_R45
+      slave: 1
+      address: 0x0138
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R46"
+      unique_id: heatpump_eco_freq_heat_R46
+      slave: 1
+      address: 0x0139
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R47"
+      unique_id: heatpump_eco_freq_heat_R47
+      slave: 1
+      address: 0x013A
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R48"
+      unique_id: heatpump_eco_freq_heat_R48
+      slave: 1
+      address: 0x013B
+      data_type: uint16
+    - name: "Heatpump ECO Freq heat R49u"
+      unique_id: heatpump_eco_freq_heat_R49
+      slave: 1
+      address: 0x013C
+      data_type: uint16
+    - name: "Heatpump Night freq heat R62"
+      unique_id: heatpump_night_freq_heat_R62
+      slave: 1
+      address: 0x0149
+      data_type: uint16
+    - name: "Heatpump Night freq heat R63"
+      unique_id: heatpump_night_freq_heat_R63
+      slave: 1
+      address: 0x014A
+      data_type: uint16
+    - name: "Heatpump Night freq heat R64"
+      unique_id: heatpump_night_freq_heat_R64
+      slave: 1
+      address: 0x014B
+      data_type: uint16
+    - name: "Heatpump Night freq heat R65"
+      unique_id: heatpump_night_freq_heat_R65
+      slave: 1
+      address: 0x014C
+      data_type: uint16
+    - name: "Heatpump Night freq heat R66"
+      unique_id: heatpump_night_freq_heat_R66
+      slave: 1
+      address: 0x014D
+      data_type: uint16
+    - name: "Heatpump Night freq heat R67"
+      unique_id: heatpump_night_freq_heat_R67
+      slave: 1
+      address: 0x014E
+      data_type: uint16
+    - name: "Heatpump Night freq heat R68"
+      unique_id: heatpump_night_freq_heat_R68
+      slave: 1
+      address: 0x014F
+      data_type: uint16
+    - name: "Heatpump Night freq heat R69"
+      unique_id: heatpump_night_freq_heat_R69
+      slave: 1
+      address: 0x0150
+      data_type: uint16
+#  climates:
+#    - name: "Watlow F4T"
+#      unique_id: heatpump_test_change_value
+#      target_temp_register: 0x00CA  # Modbus register address for target temperature
+#      current_temp_register: 0x00CA  # Modbus register address for current temperature
+#    hvac_modes:
+#      - "off"
+#      - "heat"
+#      - "cool"
+#      - "auto"
+#      min_temp: 10  # Minimum temperature
+#      max_temp: 55  # Maximum temperature
+#      temp_step: 1  # Temperature step
+#  registers:
+#    - name: "Watlow F4T" 
+#      unique_id: heatpump_hotwater_setpoint
+#      slave: 1
+#      address: 0x00CA
+#      data_type: uint16
+#      scale:  0.5
+#      precision: 1
+#      unit_of_measurement: °C

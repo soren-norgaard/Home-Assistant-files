@@ -1,0 +1,39 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensors.yaml
+template: !include templates.yaml
+modbus: !include modbus.yaml
+alarm_control_panel: !include alarm_control_panel.yaml
+
+ihc:
+  - url: 'http://10.0.1.210'
+    username: admin
+    password: formula1
+    info: True
+    sensor:
+      - id: 330851604
+        name: Temperatur_living_room
+        unit_of_measurement: "°C"
+        note: Floor and wall temp.
+        position: On wall between windows    
+
+home_connect_alt:
+  client_id: 66CA00DEBDA18BB8B35065753100E5C37F02E56AB8CB1D67C0DFEE49EF7340AC
+  client_secret: 59C41756DA24BF49488AD66BF636835269DDBF26BF0B0AD6848877A4364AD28B
+  
+python_script:
+
+## Logger:
+#logger:
+#  default: info
+#  logs:
+#    homeassistant.components.roomba: debug
