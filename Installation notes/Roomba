@@ -17,3 +17,9 @@ homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'st
 Køkken
 
 [homeassistant.components.roomba.irobot_base] Got new state from the vacuum: {'state': {'reported': {'lastCommand': {'command': 'start', 'ordered': 1, 'params': None, 'pmap_id': 'jxMoWnYcQ0yfaq5Lr4ZUNA', 'regions': [{'params': {'noAutoPasses': True, 'twoPass': False}, 'region_id': '14', 'type': 'rid'}], 'user_pmapv_id': '240329T214848', 'time': 1713182791, 'initiator': 'rmtApp', 'favorite_id': '23afb004011cbc6cde5a33897ce8c1a3'}}}}
+
+
+use service: vacuum.send_command
+
+service data: {"entity_id": "vacuum.roomba", "command": "start", "params": {"noAutoPasses": true, "twoPass": false}, 
+               ...
