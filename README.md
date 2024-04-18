@@ -1,3 +1,3 @@
 # Home-Assistant-files
 
-In this repos
+In this repo key information about setup in HA is stored.
