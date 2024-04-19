@@ -14,7 +14,14 @@
         device_class: power
         value_template: >-
           {{ states('number.the_bebop_charging_amps') |float * state_attr('sensor.the_bebop_charger_power', 'charger_volts') * 3}}
-
+      sauna_temperature:
+        friendly_name: 'Sauna Temperature'
+        unit_of_measurement: '°C'
+        value_template: "{{ states('sensor.sonoff_snzb_02d_temperature') }}"    
+      sauna_humidity:
+        friendly_name: 'Sauna Humidity'
+        unit_of_measurement: '%'
+        value_template: "{{ states('sensor.sonoff_snzb_02d_humidity') }}"    
 
 
 #      charge_complete:
